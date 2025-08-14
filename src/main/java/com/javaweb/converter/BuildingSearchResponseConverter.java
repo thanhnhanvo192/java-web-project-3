@@ -14,17 +14,15 @@ import java.util.stream.Collectors;
 public class BuildingSearchResponseConverter {
     @Autowired
     private ModelMapper modelMapper;
+    @Autowired
+    private RentAreaConverter rentAreaConverter;
 
     public BuildingSearchResponse toBuildingSearchResponse(BuildingEntity buildingEntity) {
         BuildingSearchResponse buildingSearchResponse = modelMapper.map(buildingEntity, BuildingSearchResponse.class);
         buildingSearchResponse.setAddress(buildingEntity
                 .getStreet() + ", " + buildingEntity.getWard() + ", " + buildingEntity.getDistrict());
-
         List<RentAreaEntity> rentAreas = buildingEntity.getRentAreas();
-        String rentAreaStr = rentAreas.stream().map(item -> item.getValue().toString())
-                                                .collect(Collectors.joining(","));
-        buildingSearchResponse.setRentArea(rentAreaStr);
-
+        buildingSearchResponse.setRentArea(rentAreaConverter.listToString(rentAreas));
         return buildingSearchResponse;
     }
 }

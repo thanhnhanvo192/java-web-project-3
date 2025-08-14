@@ -216,11 +216,11 @@
                             <div class="form-group">
                                 <label class="col-xs-3"></label>
                                 <div class="col-xs-9">
-                                <c:if test="${empty buildingEdit.id}"><button type="button" class="btn btn-info" id="btnAddOrUpdateBuilding">
+                                <c:if test="${empty buildingEdit.id}"><button type="button" class="btn btn-info" id="btnAddBuilding">
                                         Thêm toà nhà
                                     </button>
                                 </c:if>
-                                <c:if test="${not empty buildingEdit.id}"><button type="button" class="btn btn-info" id="btnAddOrUpdateBuilding">
+                                <c:if test="${not empty buildingEdit.id}"><button type="button" class="btn btn-info" id="btnUpdateBuilding">
                                         Sửa toà nhà
                                     </button>
                                 </c:if>
@@ -249,7 +249,7 @@
 <!-- /.main-container -->
 
 <script>
-    $("#btnAddOrUpdateBuilding").click(function () {
+    function saveBuilding() {
         var data = {};
         var typeCode = [];
         var formData = $("#form-edit").serializeArray();
@@ -275,7 +275,8 @@
                 console.log(respond);
             }
         });
-    });
+    }
+    $('#btnAddBuilding, #btnUpdateBuilding').click(saveBuilding);
 
     $("#btnCancel").click(function () {
         window.location.href = "/admin/building-list";

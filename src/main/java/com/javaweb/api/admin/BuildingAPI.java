@@ -17,16 +17,16 @@ import java.util.List;
 public class BuildingAPI {
     @Autowired
     private IBuildingService buildingService;
+
     @PostMapping("/addOrUpdate")
     public ResponseEntity<BuildingDTO> addOrUpdateBuilding(@RequestBody BuildingDTO buildingDTO) {
         //Xuống DB để xử lí thêm hoặc sửa
-        BuildingDTO savedBuilding = buildingService.addBuilding(buildingDTO);
+        BuildingDTO savedBuilding = buildingService.addOrUpdateBuilding(buildingDTO);
         return ResponseEntity.ok(savedBuilding);
     }
     @DeleteMapping("/{ids}")
     public void deleteBuilding(@PathVariable List<Long> ids) {
-        //Xuống db để xoá
-        return;
+        buildingService.deleteBuilding(ids);
     }
     @GetMapping("/{id}/staffs")
     public ResponseDTO loadStaffs(@PathVariable Long id) {
@@ -35,7 +35,7 @@ public class BuildingAPI {
     }
     @PostMapping("/assignment")
     public void updateAssignmentBuilding(@RequestBody AssignmentBuildingDTO assignmentBuildingDTO) {
-        System.out.println("OK");
+        buildingService.assignmentBuilding(assignmentBuildingDTO);
     }
     @PostMapping("/search")
     public ResponseEntity<List<BuildingSearchResponse>> searchBuilding(@RequestBody BuildingSearchRequest buildingSearchRequest) {

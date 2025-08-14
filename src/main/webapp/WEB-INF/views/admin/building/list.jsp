@@ -406,7 +406,7 @@ breadcrumbs      <script type="text/javascript">
         row += '<a href="/admin/building-edit-' + building.id + '" class="btn btn-xs btn-info" title="Sửa toà nhà">';
         row += '<i class="ace-icon fa fa-pencil bigger-120"></i>';
         row += '</a>';
-        row += '<button class="btn btn-xs btn-danger" title="Xoá toà nhà" onClick="deleteBuilding(building.id)">';
+        row += '<button class="btn btn-xs btn-danger" title="Xoá toà nhà" onClick="deleteBuilding(' + building.id + ')">';
         row += '<i class="ace-icon fa fa-trash-o bigger-120"></i>';
         row += '</button>';
         row += '</div>';
@@ -494,6 +494,7 @@ breadcrumbs      <script type="text/javascript">
     var buildingId = [id];
     deleteBuildings(buildingId);
   }
+
   $('#btnDeleteBuilding').click(function(e) {
     e.preventDefault();
     var buildingIds = $('#tableList').find('tbody input[type = checkbox]:checked').map(function(){

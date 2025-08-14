@@ -3,6 +3,7 @@ package com.javaweb.entity;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "building")
@@ -86,8 +87,11 @@ public class BuildingEntity {
     @Column(name = "note")
     private String note;
 
-    @ManyToMany(mappedBy = "buildingEntities", fetch = FetchType.LAZY)
-    private List<UserEntity> userEntities = new ArrayList<>();
+//    @ManyToMany(mappedBy = "buildingEntities", fetch = FetchType.LAZY)
+//    private List<UserEntity> userEntities = new ArrayList<>();
+
+    @OneToMany(mappedBy = "building", fetch = FetchType.LAZY)
+    private List<AssignmentBuildingEntity> assignmentBuildingEntities = new ArrayList<>();
 
     @OneToMany(mappedBy = "building", fetch = FetchType.LAZY)
     private List<RentAreaEntity> rentAreas = new ArrayList<>();
@@ -186,14 +190,6 @@ public class BuildingEntity {
 
     public void setNumberOfBasement(Long numberOfBasement) {
         this.numberOfBasement = numberOfBasement;
-    }
-
-    public List<UserEntity> getUserEntities() {
-        return userEntities;
-    }
-
-    public void setUserEntities(List<UserEntity> userEntities) {
-        this.userEntities = userEntities;
     }
 
     public List<RentAreaEntity> getRentAreas() {
@@ -314,5 +310,20 @@ public class BuildingEntity {
 
     public void setNote(String note) {
         this.note = note;
+    }
+
+    public List<AssignmentBuildingEntity> getAssignmentBuildingEntities() {
+        return assignmentBuildingEntities;
+    }
+
+    public void setAssignmentBuildingEntities(List<AssignmentBuildingEntity> assignmentBuildingEntities) {
+        this.assignmentBuildingEntities = assignmentBuildingEntities;
+    }
+
+    public List<UserEntity> getUserEntities() {
+        return assignmentBuildingEntities.stream()
+                .map(AssignmentBuildingEntity::getStaff)
+                .distinct()
+                .collect(Collectors.toList());
     }
 }
