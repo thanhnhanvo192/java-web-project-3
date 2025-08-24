@@ -12,6 +12,7 @@ public enum District {
     QUAN_8("Quận 8"),
     QUAN_9("Quận 9"),
     QUAN_11("Quận 11"),
+    QUAN_4("Quận 4"),
     QUAN_BINH_THANH("Quận Bình Thạnh");
 
     private final String districtName;
@@ -24,5 +25,12 @@ public enum District {
             districts.put(item.toString(), item.districtName);
         }
         return districts;
+    }
+    public static String getDistrictName(String code) {
+        try {
+            return District.valueOf(code).districtName;
+        }catch (Exception e) {
+            return code;
+        }
     }
 }

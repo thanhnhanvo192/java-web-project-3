@@ -6,10 +6,16 @@ import com.javaweb.model.request.BuildingSearchRequest;
 import com.javaweb.model.response.BuildingSearchResponse;
 import com.javaweb.model.response.ResponseDTO;
 import com.javaweb.service.IBuildingService;
+import com.javaweb.utils.DisplayTagUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController(value = "BuildingAPIOfAdmin")
@@ -19,7 +25,7 @@ public class BuildingAPI {
     private IBuildingService buildingService;
 
     @PostMapping("/addOrUpdate")
-    public ResponseEntity<BuildingDTO> addOrUpdateBuilding(@RequestBody BuildingDTO buildingDTO) {
+    public ResponseEntity<BuildingDTO> addOrUpdateBuilding(@Valid @RequestBody BuildingDTO buildingDTO) {
         //Xuống DB để xử lí thêm hoặc sửa
         BuildingDTO savedBuilding = buildingService.addOrUpdateBuilding(buildingDTO);
         return ResponseEntity.ok(savedBuilding);
@@ -38,8 +44,14 @@ public class BuildingAPI {
         buildingService.assignmentBuilding(assignmentBuildingDTO);
     }
     @PostMapping("/search")
-    public ResponseEntity<List<BuildingSearchResponse>> searchBuilding(@RequestBody BuildingSearchRequest buildingSearchRequest) {
-        List<BuildingSearchResponse> result = buildingService.findBuildings(buildingSearchRequest);
+    public ResponseEntity<List<BuildingSearchResponse>> searchBuilding(@RequestBody BuildingSearchRequest model, HttpServletRequest request) {
+        DisplayTagUtils.of(request, model);
+        Pageable pageable = PageRequest.of(
+                model.getPage() - 1,
+                model.getMaxPageItems(),
+                Sort.by("id").ascending()
+        );
+        List<BuildingSearchResponse> result = buildingService.findBuildings(model, pageable);
         return ResponseEntity.ok(result);
     }
 }

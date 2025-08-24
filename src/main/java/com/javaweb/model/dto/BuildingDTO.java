@@ -1,11 +1,14 @@
 package com.javaweb.model.dto;
 
+import javax.validation.constraints.NotBlank;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class BuildingDTO extends AbstractDTO{
+
     private Long id;
+    @NotBlank(message = "Tên toà nhà không được để trống!")
     private String name;
     private String street;
     private String ward;

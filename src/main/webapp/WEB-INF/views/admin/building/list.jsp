@@ -52,7 +52,7 @@ breadcrumbs      <script type="text/javascript">
                   style="font-family: 'Times New Roman', Times, serif"
           >
             <div class="widget-main">
-              <form:form id="listForm" action="${buildingListURL}" modelAttribute="buildingSearchRequest" method="GET">
+              <form:form id="listForm" action="${buildingListURL}" modelAttribute="model" method="GET">
               <div class="row">
                 <div class="form-group">
                   <div class="col-xs-12">
@@ -62,7 +62,7 @@ breadcrumbs      <script type="text/javascript">
                     </div>
                     <div class="col-xs-6">
                       <label class="name">Diện tích sàn</label>
-                      <form:input class="form-control" path="floorArea" />
+                      <form:input class="form-control" path="floorArea"/>
                     </div>
                   </div>
 
@@ -221,79 +221,56 @@ breadcrumbs      <script type="text/javascript">
     <!-- Bảng danh sách -->
     <div class="row">
       <div class="col-xs-12">
-        <table
-                style="margin: 3em 0 1.5em"
-                id="tableList"
-                class="table table-striped table-bordered table-hover"
-        >
-          <thead>
-          <tr>
-            <th class="center">
-              <label class="pos-rel">
-                <input type="checkbox" class="ace" name="checkList" value=""/>
-                <span class="lbl"></span>
-              </label>
-            </th>
-            <th>Tên toà nhà</th>
-            <th>Địa chỉ</th>
-            <th>Số tầng hầm</th>
-            <th>Tên quản lí</th>
-            <th>SĐT quản lí</th>
-            <th>Diện tích sàn</th>
-            <th>Diện tích trống</th>
-            <th>Diện tích thuê</th>
-            <th>Giá thuê</th>
-            <th>Phí dịch vụ</th>
-            <th>Phí môi giới</th>
-            <th>Thao tác</th>
-          </tr>
-          </thead>
-
-          <tbody>
-          <c:forEach items="${buildingSearchResponseList}" var="item">
-          <tr>
-            <td class="center">
-              <label class="pos-rel">
-                <input type="checkbox" class="ace" name="checkList" value="${item.id}"/>
-                <span class="lbl"></span>
-              </label>
-            </td>
-
-            <td>${item.name}</td>
-            <td>${item.address}</td>
-            <td>${item.numberOfBasement}</td>
-            <td>${item.managerName}</td>
-            <td>${item.managerPhone}</td>
-            <td>${item.floorArea}</td>
-            <td>${item.emptyArea}</td>
-            <td>${item.rentArea}</td>
-            <td>${item.rentPrice}</td>
-            <td>${item.serviceFee}</td>
-            <td>${item.brokerageFee}</td>
-
-            <td>
-              <div class="hidden-sm hidden-xs btn-group">
+        <div class="table-responsive">
+          <display:table name="${model.listResult}" cellspacing="0" cellpadding="0"
+                         requestURI="${buildingListURL}" partialList="true" sort="external"
+                         size="${model.totalItems}" defaultsort="2" defaultorder="ascending"
+                         id="tableList" pagesize="${model.maxPageItems}"
+                         export="false"
+                         class="table table-fcv-ace table-striped table-bordered table-hover dataTable no-footer"
+                         style="margin: 3em 0 1.5em;">
+            <display:column title="<fieldset class='form-group'>
+							<input type='checkbox' id='checkAll' class='check-box-element'>
+							</fieldset>" class="center select-cell"
+                            headerClass="center select-cell">
+              <fieldset>
+                <input type="checkbox" name="checkList" value="${tableList.id}"
+                       id="checkbox_${tableList.id}" class="check-box-element"/>
+              </fieldset>
+            </display:column>
+            <display:column headerClass="text-left" property="name" title="Tên"/>
+            <display:column headerClass="text-left" property="address" title="Địa chỉ"/>
+            <display:column headerClass="text-left" property="numberOfBasement" title="Số tầng hầm"/>
+            <display:column headerClass="text-left" property="managerName" title="Tên quản lí"/>
+            <display:column headerClass="text-left" property="managerPhone" title="SĐT quản lí"/>
+            <display:column headerClass="text-left" property="floorArea" title="Diện tích sàn"/>
+            <display:column headerClass="text-left" property="emptyArea" title="Diện tích trống"/>
+            <display:column headerClass="text-left" property="rentArea" title="Diện tích thuê"/>
+            <display:column headerClass="text-left" property="rentPrice" title="Giá thuê"/>
+            <display:column headerClass="text-left" property="serviceFee" title="Phí dịch vụ"/>
+            <display:column headerClass="text-left" property="brokerageFee" title="Phí môi giới"/>
+            <display:column headerClass="text-left" title="Thao tác">
+            <div class="hidden-sm hidden-xs btn-group">
                 <button
                         class="btn btn-xs btn-success"
                         title="Giao toà nhà"
-                        onclick="assignmentBuilding(${item.id})"
+                        onclick="assignmentBuilding(${tableList.id})"
                 >
                   <i class="ace-icon glyphicon glyphicon-align-justify"></i>
                 </button>
 
-                <a href="/admin/building-edit-${item.id}" class="btn btn-xs btn-info" title="Sửa toà nhà">
+                <a href="/admin/building-edit-${tableList.id}" class="btn btn-xs btn-info" title="Sửa toà nhà">
                   <i class="ace-icon fa fa-pencil bigger-120"></i>
                 </a>
 
-                <button class="btn btn-xs btn-danger" title="Xoá toà nhà" onclick="deleteBuilding(${item.id})">
+                <button class="btn btn-xs btn-danger" title="Xoá toà nhà" onclick="deleteBuilding(${tableList.id})">
                   <i class="ace-icon fa fa-trash-o bigger-120"></i>
                 </button>
               </div>
-            </td>
-          </tr>
-          </c:forEach>
-          </tbody>
-        </table>
+            </display:column>
+
+          </display:table>
+        </div>
       </div>
       <!-- /.span -->
     </div>
@@ -375,9 +352,9 @@ breadcrumbs      <script type="text/javascript">
       contentType: 'application/json',
       dataType: 'json',
       success: function (response) {
-    // response chính là danh sách toà nhà dạng mảng JSON
-    $('#tableList tbody').empty();
-    $.each(response, function (index, building){
+      // response chính là danh sách toà nhà dạng mảng JSON
+      $('#tableList tbody').empty();
+      $.each(response, function (index, building){
         var row = '<tr>';
         row += '<td class="center">';
         row += '<label class="pos-rel">';
@@ -414,8 +391,9 @@ breadcrumbs      <script type="text/javascript">
         row += '</tr>';
 
         $('#tableList tbody').append(row);
-    });
-},
+      });
+      $('#listForm').submit();
+      },
       error: function (response) {
         console.log('failed');
         console.log(response);

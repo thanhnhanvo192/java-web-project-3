@@ -55,7 +55,7 @@
                             <div class="form-group">
                                 <label class="col-xs-3">Thêm toà nhà</label>
                                 <div class="col-xs-9">
-                                    <form:input class="form-control" path="name" />
+                                    <form:input class="form-control" path="name" required="true"/>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -261,6 +261,7 @@
             }
         });
         data["typeCode"] = typeCode;
+        if (typeCode !== '' && typeCode.length !== 0) {
         $.ajax({
             type : "POST",
             url : "${buildingAPI}/addOrUpdate",
@@ -269,12 +270,17 @@
             dataType : "JSON",
             success : function(respond) {
                 console.log("Success");
+                window.location.href = "/admin/building-edit?message=success";
             },
             error : function(respond) {
                 console.log("failed");
                 console.log(respond);
+                window.location.href = "/admin/building-edit?message=error";
             }
         });
+        } else {
+            window.location.href = "/admin/building-edit?typeCode=required";
+        }
     }
     $('#btnAddBuilding, #btnUpdateBuilding').click(saveBuilding);
 

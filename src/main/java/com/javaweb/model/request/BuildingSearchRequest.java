@@ -7,7 +7,7 @@ import java.util.List;
 public class BuildingSearchRequest extends AbstractDTO {
     private String name;
     private Long floorArea;
-    private Long district;
+    private String district;
     private String ward;
     private String street;
     private Long numberOfBasement;
@@ -71,11 +71,11 @@ public class BuildingSearchRequest extends AbstractDTO {
         this.ward = ward;
     }
 
-    public Long getDistrict() {
+    public String getDistrict() {
         return district;
     }
 
-    public void setDistrict(Long district) {
+    public void setDistrict(String district) {
         this.district = district;
     }
 

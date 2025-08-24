@@ -3,6 +3,9 @@ package com.javaweb.repository.custom.impl;
 import com.javaweb.builder.BuildingSearchBuilder;
 import com.javaweb.entity.BuildingEntity;
 import com.javaweb.repository.custom.IBuildingRepositoryCustom;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -93,16 +96,25 @@ public class IBuildingRepositoryImpl implements IBuildingRepositoryCustom {
     }
 
     @Override
-    public List<BuildingEntity> findBuildings(BuildingSearchBuilder buildingSearchBuilder) {
-        StringBuilder sql = new StringBuilder(" SELECT b.* FROM building as b ");
-        StringBuilder whereSql = new StringBuilder();
-        joinTable(buildingSearchBuilder, whereSql);
-        whereSql.append(" WHERE 1=1 ");
+    public Page<BuildingEntity> findBuildings(BuildingSearchBuilder buildingSearchBuilder, Pageable pageable) {
+        StringBuilder fromSql = new StringBuilder(" FROM building b ");
+        StringBuilder whereSql = new StringBuilder(" WHERE 1=1 ");
+
+        joinTable(buildingSearchBuilder, fromSql);
         normalQuery(buildingSearchBuilder, whereSql);
         specialQuery(buildingSearchBuilder, whereSql);
-        whereSql.append(" GROUP BY b.id ");
-        sql.append(whereSql);
+
+        StringBuilder sql =
+                new StringBuilder(" SELECT b.* " + fromSql + whereSql + " GROUP BY b.id ORDER BY b.id ASC ");
         Query query = entityManager.createNativeQuery(sql.toString(), BuildingEntity.class);
-        return query.getResultList();
+        query.setFirstResult((int) pageable.getOffset());
+        query.setMaxResults(pageable.getPageSize());
+
+        List<BuildingEntity> result = query.getResultList();
+        String splCount = " SELECT COUNT(DISTINCT b.id) " + fromSql + whereSql;
+        Query countQuery = entityManager.createNativeQuery(splCount);
+        Number total = (Number) countQuery.getSingleResult();
+
+        return new PageImpl<>(result, pageable, total.longValue());
     }
 }

@@ -2,9 +2,9 @@ package com.javaweb.repository.custom;
 
 import com.javaweb.builder.BuildingSearchBuilder;
 import com.javaweb.entity.BuildingEntity;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface IBuildingRepositoryCustom {
-    List<BuildingEntity> findBuildings(BuildingSearchBuilder buildingSearchBuilder);
+    Page<BuildingEntity> findBuildings(BuildingSearchBuilder buildingSearchBuilder, Pageable pageable);
 }

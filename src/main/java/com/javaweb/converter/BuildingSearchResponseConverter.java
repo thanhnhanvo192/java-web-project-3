@@ -2,6 +2,7 @@ package com.javaweb.converter;
 
 import com.javaweb.entity.BuildingEntity;
 import com.javaweb.entity.RentAreaEntity;
+import com.javaweb.enums.District;
 import com.javaweb.model.response.BuildingSearchResponse;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,7 @@ public class BuildingSearchResponseConverter {
     public BuildingSearchResponse toBuildingSearchResponse(BuildingEntity buildingEntity) {
         BuildingSearchResponse buildingSearchResponse = modelMapper.map(buildingEntity, BuildingSearchResponse.class);
         buildingSearchResponse.setAddress(buildingEntity
-                .getStreet() + ", " + buildingEntity.getWard() + ", " + buildingEntity.getDistrict());
+                .getStreet() + ", " + buildingEntity.getWard() + ", " + District.getDistrictName(buildingEntity.getDistrict()));
         List<RentAreaEntity> rentAreas = buildingEntity.getRentAreas();
         buildingSearchResponse.setRentArea(rentAreaConverter.listToString(rentAreas));
         return buildingSearchResponse;
