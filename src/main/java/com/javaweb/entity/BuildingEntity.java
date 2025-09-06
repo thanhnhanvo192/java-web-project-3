@@ -86,8 +86,10 @@ public class BuildingEntity {
     @Column(name = "note")
     private String note;
 
-    @ManyToMany(mappedBy = "buildingEntities", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST,
-                                                                                CascadeType.MERGE})
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "assignmentbuilding",
+            joinColumns = @JoinColumn(name = "buildingid", nullable = false),
+            inverseJoinColumns = @JoinColumn(name = "staffid", nullable = false))
     private List<UserEntity> userEntities = new ArrayList<>();
 
 //    @OneToMany(mappedBy = "building", fetch = FetchType.LAZY)

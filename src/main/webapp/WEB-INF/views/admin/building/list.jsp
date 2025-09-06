@@ -475,10 +475,6 @@ breadcrumbs      <script type="text/javascript">
     $("#assignmentBuildingModal").modal("hide");
   }
 
-  function deleteBuilding(id) {
-    var buildingId = [id];
-    deleteBuildings(buildingId);
-  }
 
   $('#btnDeleteBuilding').click(function(e) {
     e.preventDefault();
@@ -488,19 +484,27 @@ breadcrumbs      <script type="text/javascript">
     deleteBuildings(buildingIds);
   });
 
+  function deleteBuilding(id) {
+    var buildingId = [id];
+    deleteBuildings(buildingId);
+  }
+
   function deleteBuildings(data) {
     $.ajax({
       type : "DELETE",
       url : "${buildingAPI}/" + data,
       data : JSON.stringify(data),
       contentType : "application/json",
-      dataType : "JSON",
+      // dataType : "JSON",
       success : function (respond) {
         console.log("Success");
+        alert("Xoá thành công");
+        window.location.href="/admin/building-list?message=success";
       },
       error : function (respond) {
         console.log("failed");
         console.log(respond);
+        alert("Xoá thất bại");
       }
     });
   }
