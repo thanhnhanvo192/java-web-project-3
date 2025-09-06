@@ -490,6 +490,7 @@ breadcrumbs      <script type="text/javascript">
       dataType : "JSON",
       success : function (respond) {
         console.log("Success");
+        confirm("Xoá toà nhà thành công!");
       },
       error : function (respond) {
         console.log("failed");

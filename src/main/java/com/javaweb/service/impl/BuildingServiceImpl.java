@@ -115,12 +115,9 @@ public class BuildingServiceImpl implements IBuildingService {
     @Override
     @Transactional
     public void deleteBuilding(List<Long> buildingIds) {
-        for (Long buildingId : buildingIds) {
-            BuildingEntity buildingEntity = buildingRepository.findById(buildingId).get();
-            rentAreaRepository.deleteRentAreaEntitiesByBuilding(buildingEntity);
-            assignmentBuildingRepository.deleteAssignmentBuildingEntitiesByBuilding(buildingEntity);
-            buildingRepository.deleteById(buildingId);
-        }
+        rentAreaRepository.deleteRentAreaEntitiesByBuildingIdIn(buildingIds);
+        assignmentBuildingRepository.deleteAssignmentBuildingEntitiesByBuildingIdIn(buildingIds);
+        buildingRepository.deleteBuildingEntitiesByIdIn(buildingIds);
     }
 
     @Override
