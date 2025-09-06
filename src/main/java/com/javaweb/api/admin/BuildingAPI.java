@@ -40,8 +40,9 @@ public class BuildingAPI {
     return result;
     }
     @PostMapping("/assignment")
-    public void updateAssignmentBuilding(@RequestBody AssignmentBuildingDTO assignmentBuildingDTO) {
+    public ResponseEntity<Void> updateAssignmentBuilding(@RequestBody AssignmentBuildingDTO assignmentBuildingDTO) {
         buildingService.assignmentBuilding(assignmentBuildingDTO);
+        return ResponseEntity.ok().build();
     }
     @PostMapping("/search")
     public ResponseEntity<List<BuildingSearchResponse>> searchBuilding(@RequestBody BuildingSearchRequest model, HttpServletRequest request) {

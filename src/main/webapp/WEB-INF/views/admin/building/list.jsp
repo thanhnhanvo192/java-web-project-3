@@ -416,6 +416,7 @@ breadcrumbs      <script type="text/javascript">
       contentType: "application/json",
       dataType: "JSON",
       success: function (response) {
+        $('#staffList tbody').empty();
         var row = '';
         $.each(response.data, function (index, item) {
           row += '<tr>';
@@ -431,7 +432,7 @@ breadcrumbs      <script type="text/javascript">
         console.log("Success");
       },
       error: function (response) {
-        console.log("failed"),
+        console.log("failed");
         console.log(response);
       }
     });
@@ -456,16 +457,22 @@ breadcrumbs      <script type="text/javascript">
       url: "${buildingAPI}/assignment",
       data: JSON.stringify(data),
       contentType: "application/json",
-      dataType: "JSON",
+      // dataType: "json",  // không trả dữ liệu về từ BE
       success: function (response){
         console.log("success");
+        alert("Giao toà nhà thành công");
       },
-      error: function (response) {
-        console.info("Giao không thành công");
-        window.location.href = "<c:url value="/admin/building-list?message=error" />";
+      error: function (jqXHR, textStatus, errorThrown) {
+        alert("Giao không thành công");
+        console.log("Status code:", jqXHR.status);        // <-- status code ở đây
+        console.log("Response text:", jqXHR.responseText); // nội dung trả về
+        console.log("Error thrown:", errorThrown);         // mô tả lỗi
+        console.log("Text status:", textStatus);
+        <%--window.location.href = "<c:url value="/admin/building-list?message=error" />";--%>
         console.log(response);
       }
     });
+    $("#assignmentBuildingModal").modal("hide");
   }
 
   function deleteBuilding(id) {
