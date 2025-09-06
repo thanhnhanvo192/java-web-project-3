@@ -2,7 +2,6 @@ package com.javaweb.service.impl;
 
 import com.javaweb.builder.BuildingSearchBuilder;
 import com.javaweb.converter.*;
-import com.javaweb.entity.AssignmentBuildingEntity;
 import com.javaweb.entity.BuildingEntity;
 import com.javaweb.entity.UserEntity;
 import com.javaweb.model.dto.AssignmentBuildingDTO;
@@ -11,7 +10,6 @@ import com.javaweb.model.request.BuildingSearchRequest;
 import com.javaweb.model.response.BuildingSearchResponse;
 import com.javaweb.model.response.ResponseDTO;
 import com.javaweb.model.response.StaffResponseDTO;
-import com.javaweb.repository.IAssignmentBuildingRepository;
 import com.javaweb.repository.IBuildingRepository;
 import com.javaweb.repository.IRentAreaRepository;
 import com.javaweb.repository.UserRepository;
@@ -44,8 +42,6 @@ public class BuildingServiceImpl implements IBuildingService {
     private BuildingDTOConverter buildingDTOConverter;
     @Autowired
     private BuildingEntityConverter buildingEntityConverter;
-    @Autowired
-    private IAssignmentBuildingRepository assignmentBuildingRepository;
 
     @Override
     public ResponseDTO listStaffs(Long buildingId) {
@@ -119,19 +115,9 @@ public class BuildingServiceImpl implements IBuildingService {
     @Override
     @Transactional
     public void assignmentBuilding(AssignmentBuildingDTO assignmentBuildingDTO) {
-        BuildingEntity buildingEntity = buildingRepository
-                .findById(assignmentBuildingDTO.getBuildingId()).get();
-        assignmentBuildingRepository.deleteAssignmentBuildingEntitiesByBuilding(buildingEntity);
-
-        List<Long> staffIds = assignmentBuildingDTO.getStaffs();
-        List<AssignmentBuildingEntity> assignmentBuildingEntityList = new ArrayList<>();
-        for (Long staffId : staffIds) {
-            UserEntity staff = userRepository.findById(staffId).get();
-            AssignmentBuildingEntity assignmentBuildingEntity = new AssignmentBuildingEntity();
-            assignmentBuildingEntity.setBuilding(buildingEntity);
-            assignmentBuildingEntity.setStaff(staff);
-            assignmentBuildingEntityList.add(assignmentBuildingEntity);
-        }
-        assignmentBuildingRepository.saveAll(assignmentBuildingEntityList);
+        BuildingEntity buildingEntity = buildingRepository.findById(assignmentBuildingDTO.getBuildingId()).get();
+        List<UserEntity> staffs = userRepository.findByIdIn(assignmentBuildingDTO.getStaffs());
+        buildingEntity.setUserEntities(staffs);
+        buildingRepository.save(buildingEntity);
     }
 }

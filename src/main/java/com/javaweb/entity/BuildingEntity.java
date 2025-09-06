@@ -92,9 +92,6 @@ public class BuildingEntity {
             inverseJoinColumns = @JoinColumn(name = "staffid", nullable = false))
     private List<UserEntity> userEntities = new ArrayList<>();
 
-//    @OneToMany(mappedBy = "building", fetch = FetchType.LAZY)
-//    private List<AssignmentBuildingEntity> assignmentBuildingEntities = new ArrayList<>();
-
     @OneToMany(mappedBy = "building", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE}
                                                                         ,orphanRemoval = true)
     private List<RentAreaEntity> rentAreas = new ArrayList<>();
@@ -322,19 +319,4 @@ public class BuildingEntity {
     public void setUserEntities(List<UserEntity> userEntities) {
         this.userEntities = userEntities;
     }
-
-    //    public List<AssignmentBuildingEntity> getAssignmentBuildingEntities() {
-//        return assignmentBuildingEntities;
-//    }
-//
-//    public void setAssignmentBuildingEntities(List<AssignmentBuildingEntity> assignmentBuildingEntities) {
-//        this.assignmentBuildingEntities = assignmentBuildingEntities;
-//    }
-//
-//    public List<UserEntity> getUserEntities() {
-//        return assignmentBuildingEntities.stream()
-//                .map(AssignmentBuildingEntity::getStaff)
-//                .distinct()
-//                .collect(Collectors.toList());
-//    }
 }

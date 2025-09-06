@@ -30,20 +30,23 @@ public class BuildingAPI {
         BuildingDTO savedBuilding = buildingService.addOrUpdateBuilding(buildingDTO);
         return ResponseEntity.ok(savedBuilding);
     }
+
     @DeleteMapping("/{ids}")
     public void deleteBuilding(@PathVariable List<Long> ids) {
         buildingService.deleteBuilding(ids);
     }
+
     @GetMapping("/{id}/staffs")
     public ResponseDTO loadStaffs(@PathVariable Long id) {
     ResponseDTO result = buildingService.listStaffs(id);
     return result;
     }
+
     @PostMapping("/assignment")
-    public ResponseEntity<Void> updateAssignmentBuilding(@RequestBody AssignmentBuildingDTO assignmentBuildingDTO) {
+    public void assignmentBuilding(@RequestBody AssignmentBuildingDTO assignmentBuildingDTO) {
         buildingService.assignmentBuilding(assignmentBuildingDTO);
-        return ResponseEntity.ok().build();
     }
+
     @PostMapping("/search")
     public ResponseEntity<List<BuildingSearchResponse>> searchBuilding(@RequestBody BuildingSearchRequest model, HttpServletRequest request) {
         DisplayTagUtils.of(request, model);
