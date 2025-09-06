@@ -95,12 +95,10 @@ public class BuildingServiceImpl implements IBuildingService {
         BuildingEntity buildingEntity;
         if (buildingDTO.getId() != null) {
             buildingEntity = buildingRepository.findById(buildingDTO.getId()).get();
-            rentAreaRepository.deleteRentAreaEntitiesByBuilding(buildingEntity);
         } else {
             buildingEntity = new BuildingEntity();
         }
         buildingEntity = buildingEntityConverter.toBuildingEntity(buildingDTO, buildingEntity);
-        rentAreaRepository.saveAll(buildingEntity.getRentAreas());
         BuildingEntity savedEntity = buildingRepository.save(buildingEntity);
         return modelMapper.map(savedEntity, BuildingDTO.class);
     }
@@ -115,12 +113,13 @@ public class BuildingServiceImpl implements IBuildingService {
     @Override
     @Transactional
     public void deleteBuilding(List<Long> buildingIds) {
-        for (Long buildingId : buildingIds) {
-            BuildingEntity buildingEntity = buildingRepository.findById(buildingId).get();
-            rentAreaRepository.deleteRentAreaEntitiesByBuilding(buildingEntity);
-            assignmentBuildingRepository.deleteAssignmentBuildingEntitiesByBuilding(buildingEntity);
-            buildingRepository.deleteById(buildingId);
-        }
+//        for (Long buildingId : buildingIds) {
+//            BuildingEntity buildingEntity = buildingRepository.findById(buildingId).get();
+//            rentAreaRepository.deleteRentAreaEntitiesByBuilding(buildingEntity);
+//            assignmentBuildingRepository.deleteAssignmentBuildingEntitiesByBuilding(buildingEntity);
+//            buildingRepository.deleteById(buildingId);
+//        }
+        buildingRepository.deleteBuildingEntitiesByIdIn(buildingIds);
     }
 
     @Override

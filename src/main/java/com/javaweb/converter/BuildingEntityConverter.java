@@ -31,10 +31,12 @@ public class BuildingEntityConverter {
         }
     }
     private void setRentAreas(BuildingDTO buildingDTO, BuildingEntity buildingEntity) {
-        if (buildingDTO.getRentArea() != null && !buildingDTO.getRentArea().equals("")) {
-            List<Long> rentAreavalues = rentAreaConverter.stringToList(buildingDTO.getRentArea());
-            List<RentAreaEntity> rentAreaEntities = rentAreaConverter.toRentAreaEntities(rentAreavalues, buildingEntity);
-            buildingEntity.setRentAreas(rentAreaEntities);
+        List<RentAreaEntity> current = buildingEntity.getRentAreas();
+        current.clear();
+        if (buildingDTO.getRentArea() != null) {
+            List<Long> rentAreaValues = rentAreaConverter.stringToList(buildingDTO.getRentArea());
+            List<RentAreaEntity> rentAreas = rentAreaConverter.toRentAreaEntities(rentAreaValues, buildingEntity);
+            current.addAll(rentAreas);
         }
     }
 }

@@ -12,7 +12,7 @@ public class RentAreaEntity {
     @Column (name = "value")
     private Long value;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "buildingid")
     private BuildingEntity building;
 

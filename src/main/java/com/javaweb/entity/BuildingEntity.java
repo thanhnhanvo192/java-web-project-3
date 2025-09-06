@@ -3,7 +3,6 @@ package com.javaweb.entity;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "building")
@@ -87,13 +86,15 @@ public class BuildingEntity {
     @Column(name = "note")
     private String note;
 
-//    @ManyToMany(mappedBy = "buildingEntities", fetch = FetchType.LAZY)
-//    private List<UserEntity> userEntities = new ArrayList<>();
+    @ManyToMany(mappedBy = "buildingEntities", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST,
+                                                                                CascadeType.MERGE})
+    private List<UserEntity> userEntities = new ArrayList<>();
 
-    @OneToMany(mappedBy = "building", fetch = FetchType.LAZY)
-    private List<AssignmentBuildingEntity> assignmentBuildingEntities = new ArrayList<>();
+//    @OneToMany(mappedBy = "building", fetch = FetchType.LAZY)
+//    private List<AssignmentBuildingEntity> assignmentBuildingEntities = new ArrayList<>();
 
-    @OneToMany(mappedBy = "building", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "building", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE}
+                                                                        ,orphanRemoval = true)
     private List<RentAreaEntity> rentAreas = new ArrayList<>();
 
     public Long getId() {
@@ -312,18 +313,26 @@ public class BuildingEntity {
         this.note = note;
     }
 
-    public List<AssignmentBuildingEntity> getAssignmentBuildingEntities() {
-        return assignmentBuildingEntities;
-    }
-
-    public void setAssignmentBuildingEntities(List<AssignmentBuildingEntity> assignmentBuildingEntities) {
-        this.assignmentBuildingEntities = assignmentBuildingEntities;
-    }
-
     public List<UserEntity> getUserEntities() {
-        return assignmentBuildingEntities.stream()
-                .map(AssignmentBuildingEntity::getStaff)
-                .distinct()
-                .collect(Collectors.toList());
+        return userEntities;
     }
+
+    public void setUserEntities(List<UserEntity> userEntities) {
+        this.userEntities = userEntities;
+    }
+
+    //    public List<AssignmentBuildingEntity> getAssignmentBuildingEntities() {
+//        return assignmentBuildingEntities;
+//    }
+//
+//    public void setAssignmentBuildingEntities(List<AssignmentBuildingEntity> assignmentBuildingEntities) {
+//        this.assignmentBuildingEntities = assignmentBuildingEntities;
+//    }
+//
+//    public List<UserEntity> getUserEntities() {
+//        return assignmentBuildingEntities.stream()
+//                .map(AssignmentBuildingEntity::getStaff)
+//                .distinct()
+//                .collect(Collectors.toList());
+//    }
 }

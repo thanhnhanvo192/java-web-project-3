@@ -1,4 +1,4 @@
-package com.javaweb.entity;
+//package com.javaweb.entity;
 
 
 //import javax.persistence.*;
@@ -7,7 +7,7 @@ package com.javaweb.entity;
 //
 //@Entity
 //@Table(name = "user_role")
-public class UserRoleEntity{
+//public class UserRoleEntity{
 //
 //    @Id
 //    @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,4 +45,4 @@ public class UserRoleEntity{
 //		this.id = id;
 //	}
 
-}
+//}
