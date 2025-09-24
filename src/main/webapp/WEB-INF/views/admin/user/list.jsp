@@ -99,24 +99,26 @@
                                 <div class="table-btn-controls">
                                     <div class="pull-right tableTools-container">
                                         <div class="dt-buttons btn-overlap btn-group">
+                                            <security:authorize access="hasAnyRole('MANAGER', 'ADMIN')">
                                             <a flag="info"
                                                class="dt-button buttons-colvis btn btn-white btn-primary btn-bold"
                                                data-toggle="tooltip"
                                                 <%--title='<spring:message code="label.user.add"/>'--%>
                                                title="Thêm người dùng"
                                                href='<c:url value="/admin/user-edit"/>'>
-															<span>
-																<i class="fa fa-plus-circle bigger-110 purple"></i>
-															</span>
+                                                <span>
+                                                    <i class="fa fa-plus-circle bigger-110 purple"></i>
+                                                </span>
                                             </a>
-                                            <button id="btnDelete" type="button" disabled
-                                                    class="dt-button buttons-html5 btn btn-white btn-primary btn-bold"
-                                                    data-toggle="tooltip"
-                                                    title="Xóa bài viết" onclick="warningBeforeDelete()">
-															<span>
-																<i class="fa fa-trash-o bigger-110 pink"></i>
-															</span>
-                                            </button>
+                                                <button id="btnDelete" type="button" disabled
+                                                        class="dt-button buttons-html5 btn btn-white btn-primary btn-bold"
+                                                        data-toggle="tooltip"
+                                                        title="Xóa bài viết" onclick="warningBeforeDelete()">
+                                                    <span>
+                                                        <i class="fa fa-trash-o bigger-110 pink"></i>
+                                                    </span>
+                                                </button>
+                                            </security:authorize>
                                         </div>
                                     </div>
                                 </div>
@@ -144,16 +146,19 @@
                                         <display:column headerClass="text-left" property="userName" title="Tên"/>
                                         <display:column headerClass="text-left" property="fullName" title="full name"/>
                                         <display:column headerClass="col-actions" title="Thao tác">
+                                        <security:authorize access="hasAnyRole('MANAGER', 'ADMIN')">
                                             <c:if test="${tableList.roleCode != 'MANAGER'}">
                                                 <a class="btn btn-sm btn-primary btn-edit" data-toggle="tooltip"
                                                    title="Cập nhật người dùng"
                                                    href='<c:url value="/admin/user-edit-${tableList.id}"/>'>
                                                     <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                                 </a>
-                                            </c:if>
+                                                </c:if>
                                             <c:if test="${tableList.roleCode == 'MANAGER'}">
                                                 <p>Không đươc thao tác</p>
                                             </c:if>
+                                        </security:authorize>
+
                                         </display:column>
                                     </display:table>
                                 </div>
