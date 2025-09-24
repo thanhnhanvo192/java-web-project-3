@@ -39,7 +39,7 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 //        }
 //        return url;
         if (isUser(roles)) {
-            url = SystemConstant.HOME;
+            url = SystemConstant.ADMIN_HOME;
         } else if (isAdmin(roles)) {
             url = SystemConstant.ADMIN_HOME;
         }
@@ -62,7 +62,7 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     }
 
     private boolean isUser(List<String> roles) {
-        if (roles.contains(SystemConstant.USER_ROLE)) {
+        if (roles.contains(SystemConstant.STAFF_ROLE)) {
             return true;
         }
         return false;

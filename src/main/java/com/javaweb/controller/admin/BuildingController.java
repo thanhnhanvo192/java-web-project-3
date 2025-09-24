@@ -5,6 +5,7 @@ import com.javaweb.enums.TypeCode;
 import com.javaweb.model.dto.BuildingDTO;
 import com.javaweb.model.request.BuildingSearchRequest;
 import com.javaweb.model.response.BuildingSearchResponse;
+import com.javaweb.security.utils.SecurityUtils;
 import com.javaweb.service.IBuildingService;
 import com.javaweb.service.IUserService;
 import com.javaweb.utils.DisplayTagUtils;
@@ -37,13 +38,21 @@ public class BuildingController {
                 model.getMaxPageItems(),
                 Sort.by("id").ascending()
         );
-        List<BuildingSearchResponse> buildingSearchResponseList = buildingService.findBuildings(model, pageable);
-        model.setListResult(buildingSearchResponseList);
+        List<BuildingSearchResponse> buildingSearchResponseList;
 
         mav.addObject("model", model);
         mav.addObject("staffs", userService.getStaffs());
         mav.addObject("districts", District.getAllDistricts());
         mav.addObject("typeCodes", TypeCode.getAllTypeCode());
+
+        if (SecurityUtils.getAuthorities().contains("ROLE_STAFF")) {
+            Long staffId = SecurityUtils.getPrincipal().getId();
+            model.setStaffId(staffId);
+            buildingSearchResponseList = buildingService.findBuildings(model, pageable);
+        } else {
+            buildingSearchResponseList = buildingService.findBuildings(model, pageable);
+        }
+        model.setListResult(buildingSearchResponseList);
         return mav;
     }
 

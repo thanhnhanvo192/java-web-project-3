@@ -128,11 +128,13 @@ breadcrumbs      <script type="text/javascript">
                       <form:input class="form-control" path="managerPhone" />
                     </div>
                     <div class="col-xs-2">
+                    <security:authorize access="hasAnyRole('MANAGER', 'ADMIN')">
                       <label class="name">Nhân viên</label>
                       <form:select class="form-control" path="staffId">
                         <form:option value="">--- Chọn nhân viên ---</form:option>
                         <form:options items="${staffs}" />
                       </form:select>
+                    </security:authorize>
                     </div>
                   </div>
                   <div class="col-xs-12">
@@ -170,6 +172,7 @@ breadcrumbs      <script type="text/javascript">
             </div>
           </div>
 
+          <security:authorize access="hasAnyRole('MANAGER', 'ADMIN')">
           <div class="pull-right">
             <a href="/admin/building-edit">
               <button class="btn btn-info" title="Thêm toà nhà">
@@ -214,6 +217,8 @@ breadcrumbs      <script type="text/javascript">
               </svg>
             </button>
           </div>
+          </security:authorize>
+
         </div>
       </div>
     </div>
@@ -251,6 +256,7 @@ breadcrumbs      <script type="text/javascript">
             <display:column headerClass="text-left" property="brokerageFee" title="Phí môi giới"/>
             <display:column headerClass="text-left" title="Thao tác">
             <div class="hidden-sm hidden-xs btn-group">
+              <security:authorize access="hasAnyRole('MANAGER', 'ADMIN')">
                 <button
                         class="btn btn-xs btn-success"
                         title="Giao toà nhà"
@@ -258,14 +264,15 @@ breadcrumbs      <script type="text/javascript">
                 >
                   <i class="ace-icon glyphicon glyphicon-align-justify"></i>
                 </button>
-
+              </security:authorize>
                 <a href="/admin/building-edit-${tableList.id}" class="btn btn-xs btn-info" title="Sửa toà nhà">
                   <i class="ace-icon fa fa-pencil bigger-120"></i>
                 </a>
-
+              <security:authorize access="hasAnyRole('MANAGER', 'ADMIN')">
                 <button class="btn btn-xs btn-danger" title="Xoá toà nhà" onclick="deleteBuilding(${tableList.id})">
                   <i class="ace-icon fa fa-trash-o bigger-120"></i>
                 </button>
+              </security:authorize>
               </div>
             </display:column>
 
